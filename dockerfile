@@ -11,6 +11,7 @@ RUN dotnet publish /api/api.csproj -c "Release" -r linux-musl-x64 --no-self-cont
 
 FROM base AS final
 
+RUN apk add -q --no-progress bash
 RUN apk add -q --no-progress nginx
 RUN apk add -q --no-progress openssl
 RUN apk add -q --no-progress aspnetcore7-runtime
