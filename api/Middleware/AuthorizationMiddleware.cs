@@ -7,10 +7,10 @@ public sealed class ApiAuthorizationMiddleware : IMiddleware
 	private readonly MasterAccountsService _accountsService;
 	private readonly bool _ignoreUnauthorized;
 	private readonly ILogger _logger;
-	public ApiAuthorizationMiddleware(MasterAccountsService accountsService, ILogger<ApiAuthorizationMiddleware> logger)
+	public ApiAuthorizationMiddleware(MasterAccountsService accountsService, EnvironmentProvider environment, ILogger<ApiAuthorizationMiddleware> logger)
 	{
 		_accountsService = accountsService;
-		_ignoreUnauthorized = false;
+		_ignoreUnauthorized = environment.IGNORE_UNAUTHORIZED ?? false;
 		_logger = logger;
 	}
 
