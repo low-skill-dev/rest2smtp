@@ -14,6 +14,7 @@ builder.Configuration
 builder.Logging.AddConsole();
 
 builder.Services.AddSingleton<SettingsProviderService>();
+builder.Services.AddSingleton<EnvironmentProvider>();
 
 builder.Services.AddSingleton<LoadBalancerService>(sp => new(
 	sp.GetRequiredService<SettingsProviderService>().SmtpServiceSettings,

@@ -67,6 +67,7 @@ public class LoadBalancerService : BackgroundService
 			if(!ignoreServerIds.Contains(curr.Id) && CanUseServer(curr)) {
 				_logger.LogInformation($"SMTP-relay server with id={i} was selected for the next sending. " +
 					$"Current count is {curr.RequestsCount}, limit is {curr.RequestsLimit}.");
+				curr.RequestsCount++;
 				return i;
 			}
 		}

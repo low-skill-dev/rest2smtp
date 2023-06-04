@@ -7,8 +7,6 @@ fi
 
 echo "Spinning up the Nginx reverse-proxy..."
 nginx
-echo "Spinning up the Wireguard service..."
-wg-quick up wg0 && wg show wg0
 echo "Spinning up the ASP WebAPI..."
 dotnet /app/api.dll --no-launch-profile
 
