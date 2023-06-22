@@ -21,6 +21,10 @@
     - **REST2WG_IGNORE_UNAUTHORIZED** - server will not send any data back on an unauthorized request. It will be invisible.
         - Valid range: true/false.
         - Default: false.
+        - 
+## Full list of listened ports
+- **5001** - tcp nginx-to-api HTTP2 self-signed TLS port.
+- **5002** - tcp nginx-to-api no-TLS port.
 
 ## Required secrets file example
     {
