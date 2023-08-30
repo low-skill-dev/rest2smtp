@@ -44,4 +44,4 @@
     } ] } }
 
 ## Authorization
-Provide base64-ecndoded key, hashing which with SHA512 will evaluate into *KeyHashBase64* from the secrets file. Use *Authorization* header with *Basic* auth type.
+Provide base64-ecndoded key, hashing which with SHA512 will evaluate into *KeyHashBase64* from the secrets file. Use *Authorization* header with *Basic* auth type. You can use pre-made key generator from [here](https://github.com/LuminoDiode/rest2wireguard#if-you-want-to-use-authorization)
