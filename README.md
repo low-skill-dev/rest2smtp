@@ -21,6 +21,10 @@
     - **REST2WG_IGNORE_UNAUTHORIZED** - server will not send any data back on an unauthorized request. It will be invisible.
         - Valid range: true/false.
         - Default: false.
+        - 
+## Full list of listened ports
+- **5001** - tcp nginx-to-api HTTP2 self-signed TLS port.
+- **5002** - tcp nginx-to-api no-TLS port.
 
 ## Required secrets file example
     {
@@ -40,4 +44,4 @@
     } ] } }
 
 ## Authorization
-Provide base64-ecndoded key, hashing which with SHA512 will evaluate into *KeyHashBase64* from the secrets file. Use *Authorization* header with *Basic* auth type.
+Provide base64-ecndoded key, hashing which with SHA512 will evaluate into *KeyHashBase64* from the secrets file. Use *Authorization* header with *Basic* auth type. You can use pre-made key generator from [here](https://github.com/LuminoDiode/rest2wireguard#if-you-want-to-use-authorization)
