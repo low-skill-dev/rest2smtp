@@ -30,7 +30,9 @@
     {
       "MasterAccounts": [
         {
-          "KeyHashBase64": "YOUR_KEYHASH_HERE_SEE_https://dotnetfiddle.net/ldbnVB"
+          "KeyHashBase64": "YOUR_KEYHASH_HERE_SEE_https://dotnetfiddle.net/ldbnVB",
+          "NotBeforeUtcIso8601": "2023-01-01Z",
+          "NotAfterUtcIso8601": "2100-01-01Z"
         }
       ],
       "SmtpServiceSettings": {
