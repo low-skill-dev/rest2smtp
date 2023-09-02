@@ -31,9 +31,10 @@ public class SmtpService
 
 	public async Task<bool> Send(MimeMessage message)
 	{
-		var client = new SmtpClient()
+		using var client = new SmtpClient()
 		{
-			SslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12
+			SslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12,
+			Timeout = 5000
 		};
 
 		int safeCounter = 0;
@@ -59,14 +60,13 @@ public class SmtpService
 					$"Using server: {nodeInfo.SmtpHost}:{nodeInfo.SmtpPort}.");
 
 				await client.SendAsync(message);
-				_ = client.DisconnectAsync(true).ContinueWith(t => _logger.LogWarning(
-					$"Quit failed: {t.Exception?.Message}"), TaskContinuationOptions.OnlyOnFaulted);
 
 				return true;
 			}
 			catch(Exception ex)
 			{
 				_logger.LogWarning($"Sending failed : {ex.Message}");
+				await client.DisconnectAsync(true);
 			}
 
 			usedRelays.Add(node);
