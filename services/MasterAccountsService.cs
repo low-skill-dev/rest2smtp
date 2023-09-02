@@ -16,7 +16,8 @@ public sealed class MasterAccountsService
 		public required DateTime? NotAfter { get; init; }
 
 		public bool IsValidNow =>
-			NotBefore < DateTime.UtcNow && DateTime.UtcNow < NotAfter;
+			(NotBefore ?? DateTime.MinValue) < DateTime.UtcNow && 
+			DateTime.UtcNow < (NotAfter ?? DateTime.MaxValue);
 	}
 
 	private readonly MasterAccountParsed[] _mastersAccounts;
