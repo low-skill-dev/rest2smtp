@@ -31,18 +31,27 @@ public class SmtpService
 
 	public async Task<bool> Send(MimeMessage message)
 	{
-		using var client = new SmtpClient() {
+		using var client = new SmtpClient()
+		{
 			SslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12
 		};
 
-		List<int> ignoreList = new();
-		while(ignoreList.Count < _serverInfos.Length) { // safe counter
+		int safeCounter = 0;
+		List<int> usedRelays = new();
+		while(usedRelays.Count < _serverInfos.Length && safeCounter++ < 1000)
+		{
+			/* The logic here:
+			 * This method considered stupid. If 'SelectAndCount' will tell it to
+			 * use the same client 1k time, it will do it no thinking. And this
+			 * is correct. We don't need two methods to think about one thing.
+			 */
 			var node = _loadBalancerService.SelectAndCount();
 			if(node == -1) break;
 
 			var nodeInfo = _serverInfos[node];
 
-			try {
+			try
+			{
 				await client.ConnectAsync(nodeInfo.SmtpHost, nodeInfo.SmtpPort, SecureSocketOptions.StartTls);
 				await client.AuthenticateAsync(nodeInfo.Login, nodeInfo.Password);
 
@@ -50,12 +59,17 @@ public class SmtpService
 					$"Using server: {nodeInfo.SmtpHost}:{nodeInfo.SmtpPort}.");
 
 				await client.SendAsync(message);
+				_ = client.DisconnectAsync(true).ContinueWith(t => _logger.LogWarning(
+					$"Quit failed: {t.Exception?.Message}"), TaskContinuationOptions.OnlyOnFaulted);
+
 				return true;
-			} catch {
-				_logger.LogWarning($"Sending failed.");
+			}
+			catch(Exception ex)
+			{
+				_logger.LogWarning($"Sending failed : {ex.Message}");
 			}
 
-			ignoreList.Add(node);
+			usedRelays.Add(node);
 		}
 
 		_logger.LogError($"None of the servers was able to handle the request.");
@@ -74,7 +88,11 @@ public class SmtpService
 		message.From.Add(new MailboxAddress(fromName, from));
 		message.To.Add(new MailboxAddress("recipient", to));
 		message.Subject = subject;
-		message.Body = new MimeKit.TextPart("plain") { Text = body };
+		message.Body = new BodyBuilder
+		{
+			HtmlBody = $"<h2>{body}</h2>",
+			TextBody = body
+		}.ToMessageBody();
 
 		return await Send(message);
 	}

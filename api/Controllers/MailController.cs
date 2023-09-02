@@ -28,16 +28,15 @@ public sealed class MailController:ControllerBase
 		return Ok(new LimitationsResponse {
 			TotalPerDayLimit = _balancer.TotalLimitPerDay,
 			CanSendImmediately = _balancer.CanSendImmediately,
-			SendedLast24Hours = _balancer.TotalLimitPerDay 
-				- _balancer.CanSendImmediately - LoadBalancerService.SafetyGap
+			SendedLast24Hours = _balancer.TotalLimitPerDay - _balancer.CanSendImmediately
 		});;;
 	}
 
 	[HttpPost]
 	public async Task<IActionResult> SendEmail([FromBody][Required] SendMailRequest request)
 	{
-		var sended = await _smtp.Send(request);
+		var sendResult = await _smtp.Send(request);
 
-		return StatusCode(sended ? 200 : 500);
+		return StatusCode(sendResult ? 200 : 500);
 	}
 }
