@@ -31,7 +31,7 @@ public class SmtpService
 
 	public async Task<bool> Send(MimeMessage message)
 	{
-		using var client = new SmtpClient()
+		var client = new SmtpClient()
 		{
 			SslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12
 		};
