@@ -18,4 +18,6 @@ public class SendMailRequest
 
 	[Required]
 	public string Body { get; set; } = null!;
+
+	public string? HtmlBody { get; set; } = null;
 }

@@ -81,7 +81,8 @@ public class SmtpService
 		string fromName,
 		string to,
 		string subject,
-		string body
+		string body,
+		string? htmlBody
 		)
 	{
 		var message = new MimeMessage();
@@ -90,7 +91,7 @@ public class SmtpService
 		message.Subject = subject;
 		message.Body = new BodyBuilder
 		{
-			HtmlBody = $"<h2>{body}</h2>",
+			HtmlBody = htmlBody ?? $"<h2>{body}</h2>",
 			TextBody = body
 		}.ToMessageBody();
 
@@ -98,5 +99,5 @@ public class SmtpService
 	}
 
 	public async Task<bool> Send(SendMailRequest request) => await
-		Send(request.From, request.FromName, request.To, request.Subject, request.Body);
+		Send(request.From, request.FromName, request.To, request.Subject, request.Body, request.HtmlBody);
 }
